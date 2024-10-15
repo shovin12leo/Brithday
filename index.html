@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wishes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0e4d7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100px;
+            height: 70px;
+            background-color: #6a9eeb;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px auto; /* Center the envelope */
+            transition: all 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.1);
+        }
+
+        .envelope:after {
+            content: "";
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 30px solid #6a9eeb;
+        }
+
+        #wish {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        img {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        button {
+            background-color: #6a9eeb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        button:hover {
+            background-color: #5a8bdd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Happy Birthday!</h1>
+        <div class="envelope" onclick="openEnvelope()"></div>
+        <p id="wish"></p>
+        <img id="birthdayImage" src="your_image_url_here.jpg" alt="Birthday Image" />
+        <button onclick="printWish()">Print Wish</button>
+    </div>
+
+    <script>
+        const wishes = [
+            "Wishing you a day filled with love, joy, and all your favorite things!",
+            "Happy Birthday! May your year be filled with adventure and great memories!",
+            "On your special day, I wish you all the happiness in the world!",
+            "Cheers to you on your birthday! May this year bring you closer to your dreams!",
+            "Happy Birthday! Enjoy every moment of this special day!"
+        ];
+
+        function openEnvelope() {
+            const randomIndex = Math.floor(Math.random() * wishes.length);
+            const wishText = wishes[randomIndex];
+            document.getElementById("wish").innerText = wishText;
+
+            // Show the wish and image after 2 seconds
+            setTimeout(() => {
+                document.getElementById("wish").style.display = "block";
+                document.getElementById("birthdayImage").style.display = "block";
+            }, 2000);
+        }
+
+        function printWish() {
+            const wishText = document.getElementById("wish").innerText;
+            const birthdayImage = document.getElementById("birthdayImage").src;
+
+            if (wishText) {
+                const printWindow = window.open('', '', 'height=400,width=600');
+                printWindow.document.write('<html><head><title>Print Wish</title></head><body>');
+                printWindow.document.write('<h1>Your Birthday Wish</h1>');
+                printWindow.document.write('<p>' + wishText + '</p>');
+                printWindow.document.write('<img src="' + birthdayImage + '" alt="Birthday Image" style="width:100%;"/>');
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.print();
+            } else {
+                alert("Please click the envelope to generate a wish before printing.");
+            }
+        }
+    </script>
+</body>
+</html>
