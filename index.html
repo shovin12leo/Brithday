@@ -134,22 +134,21 @@
                 messageElement.innerText = "I My Best Friend, Welcome U";
 
                 setTimeout(() => {
-                    messageElement.innerText = "Today is your special day, wishing you many happy returns of the day!";
-                }, 2000);
-
-                setTimeout(() => {
                     // Show image with bounce animation
                     imageContainer.style.display = "block";
-                }, 4000);
+                }, 2000);
 
                 setTimeout(() => {
                     // Show envelope after image appears
                     envelope.style.display = "block";
-                }, 6000);
+                }, 4000);
 
                 // Clicking the envelope
                 envelope.addEventListener("click", function() {
-                    // Show final message with hover effect on image and typing effect
+                    // Remove the previous message and show the final message
+                    messageElement.innerText = "Today is your special day, wishing you many happy returns of the day!";
+
+                    // Show final wish after clicking envelope
                     imageElement.style.animation = "bounce 2s infinite";
                     imageElement.style.transition = "border 1s";
                     imageElement.style.border = "5px solid #FFD700"; // Glowing border
