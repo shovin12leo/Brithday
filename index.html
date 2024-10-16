@@ -3,134 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Wishes</title>
+    <title>Happy Birthday</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0e4d7;
-            color: #333;
-            margin: 0;
-            padding: 0;
+            background-color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
 
-        .container {
+        .message-container {
             text-align: center;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+
+        #image {
+            width: 50%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s infinite;
+        }
+
+        .code-prompt {
+            background-color: white;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
             padding: 20px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .envelope {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
             position: relative;
-            width: 100px;
-            height: 70px;
-            background-color: #6a9eeb;
+            animation: glow 1s infinite alternate;
+        }
+
+        .code-prompt input {
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            cursor: pointer;
-            margin: 20px auto; /* Center the envelope */
-            transition: all 0.3s ease;
+            width: 80%;
+            margin-top: 10px;
         }
 
-        .envelope:hover {
-            transform: scale(1.1);
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px #4CAF50;
+            }
+            100% {
+                box-shadow: 0 0 20px #4CAF50;
+            }
         }
 
-        .envelope:after {
-            content: "";
-            position: absolute;
-            top: -30px;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 30px solid #6a9eeb;
-        }
-
-        #wish {
-            display: none;
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #333;
-        }
-
-        img {
-            display: none;
-            margin-top: 20px;
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        button {
-            background-color: #6a9eeb;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px 5px;
-        }
-
-        button:hover {
-            background-color: #5a8bdd;
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Happy Birthday!</h1>
-        <div class="envelope" onclick="openEnvelope()"></div>
-        <p id="wish"></p>
-        <img id="birthdayImage" src="your_image_url_here.jpg" alt="Birthday Image" />
-        <button onclick="printWish()">Print Wish</button>
+    <div class="code-prompt" id="codePrompt">
+        <h2>Enter the Secret Code</h2>
+        <input type="text" id="secretCode" placeholder="Type your code here">
+        <button id="submitCode">Submit</button>
+    </div>
+    
+    <div class="message-container" id="messageContainer">
+        <p id="message"></p>
+    </div>
+    
+    <div class="image-container" id="imageContainer">
+        <img id="image" src="image.jpg" alt="Happy Birthday">
     </div>
 
     <script>
-        const wishes = [
-            "Wishing you a day filled with love, joy, and all your favorite things!",
-            "Happy Birthday! May your year be filled with adventure and great memories!",
-            "On your special day, I wish you all the happiness in the world!",
-            "Cheers to you on your birthday! May this year bring you closer to your dreams!",
-            "Happy Birthday! Enjoy every moment of this special day!"
-        ];
+        const correctCode = "yourSecretCode"; // Replace with your actual secret code
+        const codePrompt = document.getElementById("codePrompt");
+        const messageContainer = document.getElementById("messageContainer");
+        const imageContainer = document.getElementById("imageContainer");
+        const messageElement = document.getElementById("message");
+        const imageElement = document.getElementById("image");
 
-        function openEnvelope() {
-            const randomIndex = Math.floor(Math.random() * wishes.length);
-            const wishText = wishes[randomIndex];
-            document.getElementById("wish").innerText = wishText;
+        document.getElementById("submitCode").addEventListener("click", function() {
+            const enteredCode = document.getElementById("secretCode").value;
+            if (enteredCode === correctCode) {
+                codePrompt.style.display = "none";
+                messageContainer.style.display = "block";
+                imageContainer.style.display = "block";
 
-            // Show the wish and image after 2 seconds
-            setTimeout(() => {
-                document.getElementById("wish").style.display = "block";
-                document.getElementById("birthdayImage").style.display = "block";
-            }, 2000);
-        }
+                // Print message on screen
+                messageElement.innerText = "Happy Birthday to my dear friend!";
 
-        function printWish() {
-            const wishText = document.getElementById("wish").innerText;
-            const birthdayImage = document.getElementById("birthdayImage").src;
+                // Play Happy Birthday audio clip
+                const audioElement = new Audio("happy-birthday.mp3");
+                audioElement.play();
 
-            if (wishText) {
-                const printWindow = window.open('', '', 'height=400,width=600');
-                printWindow.document.write('<html><head><title>Print Wish</title></head><body>');
-                printWindow.document.write('<h1>Your Birthday Wish</h1>');
-                printWindow.document.write('<p>' + wishText + '</p>');
-                printWindow.document.write('<img src="' + birthdayImage + '" alt="Birthday Image" style="width:100%;"/>');
-                printWindow.document.write('</body></html>');
-                printWindow.document.close();
-                printWindow.print();
+                // Animate photo
+                imageElement.style.animation = "bounce 2s infinite";
+
+                // Typing animation
+                const typingMessage = "You are an amazing person!";
+                const typingElement = document.createElement("p");
+                typingElement.innerText = "";
+                document.body.appendChild(typingElement);
+
+                let typingIndex = 0;
+                setInterval(() => {
+                    if (typingIndex < typingMessage.length) {
+                        typingElement.innerText += typingMessage[typingIndex];
+                        typingIndex++;
+                    }
+                }, 50);
             } else {
-                alert("Please click the envelope to generate a wish before printing.");
+                alert("Incorrect code. Please try again.");
             }
-        }
-    </script>
-</body>
-</html>
+        });
