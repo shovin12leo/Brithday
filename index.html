@@ -15,6 +15,36 @@
             overflow: hidden;
         }
 
+        .quiz-container {
+            background-color: white;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            animation: glow 1s infinite alternate;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            display: block;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background-color: #e0e0e0;
+        }
+
         .message-container, .image-container {
             text-align: center;
             margin-top: 20px;
@@ -27,25 +57,6 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             animation: bounce 2s infinite;
-        }
-
-        .code-prompt {
-            background-color: white;
-            border: 2px solid #4CAF50;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            position: relative;
-            animation: glow 1s infinite alternate;
-        }
-
-        .code-prompt input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 80%;
-            margin-top: 10px;
         }
 
         .envelope {
@@ -97,10 +108,27 @@
     </style>
 </head>
 <body>
-    <div class="code-prompt" id="codePrompt">
-        <h2>Enter the Secret Code</h2>
-        <input type="text" id="secretCode" placeholder="Type your code here">
-        <button id="submitCode">Submit</button>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-question" id="question1">
+            <h3>Question 1: What is my favorite color?</h3>
+            <span class="quiz-option" data-answer="wrong">Red</span>
+            <span class="quiz-option" data-answer="correct">Blue</span>
+            <span class="quiz-option" data-answer="wrong">Green</span>
+        </div>
+        
+        <div class="quiz-question" id="question2" style="display:none;">
+            <h3>Question 2: What's my favorite food?</h3>
+            <span class="quiz-option" data-answer="wrong">Pasta</span>
+            <span class="quiz-option" data-answer="correct">Pizza</span>
+            <span class="quiz-option" data-answer="wrong">Burgers</span>
+        </div>
+        
+        <div class="quiz-question" id="question3" style="display:none;">
+            <h3>Question 3: Which city do I love to visit?</h3>
+            <span class="quiz-option" data-answer="correct">Paris</span>
+            <span class="quiz-option" data-answer="wrong">New York</span>
+            <span class="quiz-option" data-answer="wrong">London</span>
+        </div>
     </div>
     
     <div class="message-container" id="messageContainer">
@@ -115,62 +143,67 @@
     <div class="envelope" id="envelope">🎁</div>
 
     <script>
-        const correctCode = "yourSecretCode"; // Replace with your actual secret code
-        const codePrompt = document.getElementById("codePrompt");
+        let currentQuestion = 1;
+        const totalQuestions = 3;
+        let correctAnswers = 0;
+
+        const quizContainer = document.getElementById("quizContainer");
+        const envelope = document.getElementById("envelope");
         const messageContainer = document.getElementById("messageContainer");
         const imageContainer = document.getElementById("imageContainer");
-        const messageElement = document.getElementById("message");
         const imageElement = document.getElementById("image");
-        const envelope = document.getElementById("envelope");
         const wishText = document.getElementById("wishText");
+        const messageElement = document.getElementById("message");
 
-        document.getElementById("submitCode").addEventListener("click", function() {
-            const enteredCode = document.getElementById("secretCode").value;
-            if (enteredCode === correctCode) {
-                codePrompt.style.display = "none";
+        document.querySelectorAll(".quiz-option").forEach(option => {
+            option.addEventListener("click", function() {
+                const answer = this.getAttribute("data-answer");
+                if (answer === "correct") {
+                    correctAnswers++;
+                }
 
-                // First message
-                messageContainer.style.display = "block";
-                messageElement.innerText = "I My Best Friend, Welcome U";
+                // Move to next question or show envelope
+                if (currentQuestion < totalQuestions) {
+                    document.getElementById(`question${currentQuestion}`).style.display = "none";
+                    currentQuestion++;
+                    document.getElementById(`question${currentQuestion}`).style.display = "block";
+                } else {
+                    quizContainer.style.display = "none";
+
+                    if (correctAnswers === totalQuestions) {
+                        // Unlock the gift
+                        setTimeout(() => {
+                            envelope.style.display = "block";
+                        }, 2000);
+                    } else {
+                        alert("You need to answer all questions correctly to unlock the gift!");
+                    }
+                }
+            });
+        });
+
+        envelope.addEventListener("click", function() {
+            messageContainer.style.display = "block";
+            messageElement.innerText = "Today is your special day, wishing you many happy returns of the day!";
+
+            setTimeout(() => {
+                imageContainer.style.display = "block";
+                imageElement.style.animation = "bounce 2s infinite";
+                imageElement.style.border = "5px solid #FFD700"; // Glowing border
 
                 setTimeout(() => {
-                    // Show image with bounce animation
-                    imageContainer.style.display = "block";
-                }, 2000);
-
-                setTimeout(() => {
-                    // Show envelope after image appears
-                    envelope.style.display = "block";
-                }, 4000);
-
-                // Clicking the envelope
-                envelope.addEventListener("click", function() {
-                    // Remove the previous message and show the final message
-                    messageElement.innerText = "Today is your special day, wishing you many happy returns of the day!";
-
-                    // Show final wish after clicking envelope
-                    imageElement.style.animation = "bounce 2s infinite";
-                    imageElement.style.transition = "border 1s";
-                    imageElement.style.border = "5px solid #FFD700"; // Glowing border
-                    wishText.innerHTML = ""; // Clear the wish text
-
-                    setTimeout(() => {
-                        const finalWish = "I have a nice photo of us together. Have a nice, happy day!";
-                        let index = 0;
-                        const typingEffect = setInterval(() => {
-                            if (index < finalWish.length) {
-                                wishText.innerHTML += finalWish[index];
-                                index++;
-                            } else {
-                                clearInterval(typingEffect);
-                            }
-                        }, 100);
-                    }, 3000);
-                });
-
-            } else {
-                alert("Incorrect code. Please try again.");
-            }
+                    const finalWish = "I have a nice photo of us together. Have a nice, happy day!";
+                    let index = 0;
+                    const typingEffect = setInterval(() => {
+                        if (index < finalWish.length) {
+                            wishText.innerHTML += finalWish[index];
+                            index++;
+                        } else {
+                            clearInterval(typingEffect);
+                        }
+                    }, 100);
+                }, 3000);
+            }, 2000);
         });
     </script>
 </body>
