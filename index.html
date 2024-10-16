@@ -15,13 +15,7 @@
             overflow: hidden;
         }
 
-        .message-container {
-            text-align: center;
-            margin-top: 20px;
-            display: none; /* Initially hidden */
-        }
-
-        .image-container {
+        .message-container, .image-container {
             text-align: center;
             margin-top: 20px;
             display: none; /* Initially hidden */
@@ -54,6 +48,23 @@
             margin-top: 10px;
         }
 
+        .envelope {
+            width: 100px;
+            height: 80px;
+            background-color: #FFD700;
+            margin: 20px auto;
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+            text-align: center;
+            position: relative;
+            animation: flip 1s;
+        }
+
+        .envelope:hover {
+            box-shadow: 0 0 15px #FFD700;
+        }
+
         @keyframes glow {
             0% {
                 box-shadow: 0 0 5px #4CAF50;
@@ -74,6 +85,15 @@
                 transform: translateY(-10px);
             }
         }
+
+        @keyframes flip {
+            from {
+                transform: rotateY(0deg);
+            }
+            to {
+                transform: rotateY(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -89,7 +109,10 @@
     
     <div class="image-container" id="imageContainer">
         <img id="image" src="image.jpg" alt="Happy Birthday">
+        <div id="wishText"></div>
     </div>
+    
+    <div class="envelope" id="envelope">🎁</div>
 
     <script>
         const correctCode = "yourSecretCode"; // Replace with your actual secret code
@@ -98,38 +121,58 @@
         const imageContainer = document.getElementById("imageContainer");
         const messageElement = document.getElementById("message");
         const imageElement = document.getElementById("image");
+        const envelope = document.getElementById("envelope");
+        const wishText = document.getElementById("wishText");
 
         document.getElementById("submitCode").addEventListener("click", function() {
             const enteredCode = document.getElementById("secretCode").value;
             if (enteredCode === correctCode) {
                 codePrompt.style.display = "none";
+
+                // First message
                 messageContainer.style.display = "block";
-                imageContainer.style.display = "block";
+                messageElement.innerText = "I My Best Friend, Welcome U";
 
-                // Print message on screen
-                messageElement.innerText = "Happy Birthday to my dear friend!";
+                setTimeout(() => {
+                    messageElement.innerText = "Today is your special day, wishing you many happy returns of the day!";
+                }, 2000);
 
-                // Play Happy Birthday audio clip
-                const audioElement = new Audio("happy-birthday.mp3");
-                audioElement.play();
+                setTimeout(() => {
+                    // Show image with bounce animation
+                    imageContainer.style.display = "block";
+                }, 4000);
 
-                // Animate photo
-                imageElement.style.animation = "bounce 2s infinite";
+                setTimeout(() => {
+                    // Show envelope after image appears
+                    envelope.style.display = "block";
+                }, 6000);
 
-                // Typing animation
-                const typingMessage = "You are an amazing person!";
-                const typingElement = document.createElement("p");
-                typingElement.innerText = "";
-                document.body.appendChild(typingElement);
+                // Clicking the envelope
+                envelope.addEventListener("click", function() {
+                    // Show final message with hover effect on image and typing effect
+                    imageElement.style.animation = "bounce 2s infinite";
+                    imageElement.style.transition = "border 1s";
+                    imageElement.style.border = "5px solid #FFD700"; // Glowing border
+                    wishText.innerHTML = ""; // Clear the wish text
 
-                let typingIndex = 0;
-                setInterval(() => {
-                    if (typingIndex < typingMessage.length) {
-                        typingElement.innerText += typingMessage[typingIndex];
-                        typingIndex++;
-                    }
-                }, 50);
+                    setTimeout(() => {
+                        const finalWish = "I have a nice photo of us together. Have a nice, happy day!";
+                        let index = 0;
+                        const typingEffect = setInterval(() => {
+                            if (index < finalWish.length) {
+                                wishText.innerHTML += finalWish[index];
+                                index++;
+                            } else {
+                                clearInterval(typingEffect);
+                            }
+                        }, 100);
+                    }, 3000);
+                });
+
             } else {
                 alert("Incorrect code. Please try again.");
             }
         });
+    </script>
+</body>
+</html>
