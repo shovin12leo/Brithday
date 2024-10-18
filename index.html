@@ -3,208 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday</title>
+    <title>shovin_leo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            text-align: center;
+            background-image: url('img1.gif');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            flex-direction: column;
         }
-
-        .quiz-container {
-            background-color: white;
-            border: 2px solid #4CAF50;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            position: relative;
-            animation: glow 1s infinite alternate;
-        }
-
-        .quiz-question {
-            margin-bottom: 20px;
-        }
-
-        .quiz-option {
-            display: block;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .quiz-option:hover {
-            background-color: #e0e0e0;
-        }
-
-        .message-container, .image-container {
-            text-align: center;
-            margin-top: 20px;
-            display: none; /* Initially hidden */
-        }
-
-        #image {
-            width: 50%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            animation: bounce 2s infinite;
-        }
-
-        .envelope {
-            width: 100px;
-            height: 80px;
-            background-color: #FFD700;
-            margin: 20px auto;
-            border-radius: 10px;
-            cursor: pointer;
+        .hidden {
             display: none;
-            text-align: center;
-            position: relative;
-            animation: flip 1s;
         }
-
-        .envelope:hover {
-            box-shadow: 0 0 15px #FFD700;
+        .popup {
+            margin-top: 20px;
+            border: 2px solid #ccc;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 10px;
+            width: 50%;
+            max-width: 500px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
-
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 5px #4CAF50;
-            }
-            100% {
-                box-shadow: 0 0 20px #4CAF50;
-            }
+        .hover-effect {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
+        .hover-effect img {
+            width: 40%;
+            max-width: 400px;
+            height: auto;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 1s ease;
         }
-
-        @keyframes flip {
-            from {
-                transform: rotateY(0deg);
-            }
-            to {
-                transform: rotateY(360deg);
-            }
+        .hover-effect img:hover {
+            transform: scale(1.1);
         }
+        .download-btn {
+            display: block;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        #photo-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 1s ease, visibility 0s linear 1s;
+        }
+        photo-container.show {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
     </style>
 </head>
 <body>
-    <div class="quiz-container" id="quizContainer">
-        <div class="quiz-question" id="question1">
-            <h3>Question 1: What is my favorite color?</h3>
-            <span class="quiz-option" data-answer="wrong">Red</span>
-            <span class="quiz-option" data-answer="correct">Blue</span>
-            <span class="quiz-option" data-answer="wrong">Green</span>
-        </div>
-        
-        <div class="quiz-question" id="question2" style="display:none;">
-            <h3>Question 2: What's my favorite food?</h3>
-            <span class="quiz-option" data-answer="wrong">Pasta</span>
-            <span class="quiz-option" data-answer="correct">Pizza</span>
-            <span class="quiz-option" data-answer="wrong">Burgers</span>
-        </div>
-        
-        <div class="quiz-question" id="question3" style="display:none;">
-            <h3>Question 3: Which city do I love to visit?</h3>
-            <span class="quiz-option" data-answer="correct">Paris</span>
-            <span class="quiz-option" data-answer="wrong">New York</span>
-            <span class="quiz-option" data-answer="wrong">London</span>
-        </div>
-    </div>
+
+    <h1 id="greeting" class="hidden">Hey There you came. Great to see you, Larissa!</h1>
+    <p id="boss-message" class="hidden">My boss, Shovin, said to give you something, but first...</p>
     
-    <div class="message-container" id="messageContainer">
-        <p id="message"></p>
+    <div id="dob-container" class="popup hidden">
+        <p>What's your date of birth?</p>
+        <input type="text" id="dob-input" placeholder="DD/MM/YYYY" style="padding: 10px; border-radius: 5px; width: 80%;">
+        <button type="button" onclick="checkDOB()">Submit</button>
     </div>
-    
-    <div class="image-container" id="imageContainer">
-        <img id="image" src="image.jpg" alt="Happy Birthday">
-        <div id="wishText"></div>
+
+    <div id="key-container" class="popup hidden">
+        <p>Here you've the key to unlock: <strong>lar19</strong></p>
+        <p>Enter the key to unlock the surprise</p>
+        <input type="text" id="key-input" placeholder="Enter key" style="padding: 10px; border-radius: 5px; width: 80%;">
+        <button onclick="unlockPhoto()">Unlock</button>
     </div>
-    
-    <div class="envelope" id="envelope">🎁</div>
 
-    <script>
-        let currentQuestion = 1;
-        const totalQuestions = 3;
-        let correctAnswers = 0;
+    <div id="photo-container" class="hover-effect hidden">
+        <img id="old-photo" src="img.png" alt="Old Photo">
+        <a id="download-link" href="img.png" download="old_photo.jpg" class="download-btn hidden">Check it Out </a>
+    </div>
 
-        const quizContainer = document.getElementById("quizContainer");
-        const envelope = document.getElementById("envelope");
-        const messageContainer = document.getElementById("messageContainer");
-        const imageContainer = document.getElementById("imageContainer");
-        const imageElement = document.getElementById("image");
-        const wishText = document.getElementById("wishText");
-        const messageElement = document.getElementById("message");
+  <script>
+    // Hide the photo container and download button initially
+    const photoContainer = document.getElementById('photo-container');
+    const downloadBtn = document.getElementById('download-link');
 
-        document.querySelectorAll(".quiz-option").forEach(option => {
-            option.addEventListener("click", function() {
-                const answer = this.getAttribute("data-answer");
-                if (answer === "correct") {
-                    correctAnswers++;
-                }
-
-                // Move to next question or show envelope
-                if (currentQuestion < totalQuestions) {
-                    document.getElementById(`question${currentQuestion}`).style.display = "none";
-                    currentQuestion++;
-                    document.getElementById(`question${currentQuestion}`).style.display = "block";
-                } else {
-                    quizContainer.style.display = "none";
-
-                    if (correctAnswers === totalQuestions) {
-                        // Unlock the gift
-                        setTimeout(() => {
-                            envelope.style.display = "block";
-                        }, 2000);
-                    } else {
-                        alert("You need to answer all questions correctly to unlock the gift!");
-                    }
-                }
-            });
-        });
-
-        envelope.addEventListener("click", function() {
-            messageContainer.style.display = "block";
-            messageElement.innerText = "Today is your special day, wishing you many happy returns of the day!";
-
+    // Show greeting and boss message with delay
+    setTimeout(() => {
+        document.getElementById('greeting').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('boss-message').classList.remove('hidden');
             setTimeout(() => {
-                imageContainer.style.display = "block";
-                imageElement.style.animation = "bounce 2s infinite";
-                imageElement.style.border = "5px solid #FFD700"; // Glowing border
-
-                setTimeout(() => {
-                    const finalWish = "I have a nice photo of us together. Have a nice, happy day!";
-                    let index = 0;
-                    const typingEffect = setInterval(() => {
-                        if (index < finalWish.length) {
-                            wishText.innerHTML += finalWish[index];
-                            index++;
-                        } else {
-                            clearInterval(typingEffect);
-                        }
-                    }, 100);
-                }, 3000);
+                document.getElementById('dob-container').classList.remove('hidden');
             }, 2000);
-        });
-    </script>
+        }, 2000);
+    }, 2000);
+
+    // Check the date of birth
+    function checkDOB() {
+        const dobInput = document.getElementById('dob-input').value.trim();
+        const correctDOB = "19/10/2005";
+
+        if (dobInput === correctDOB || dobInput === "19-10-2005" || dobInput === "19.10.2005") {
+            document.getElementById('dob-container').classList.add('hidden');
+            document.getElementById('key-container').classList.remove('hidden');
+        } else {
+            alert('Incorrect date of birth! Please try again.');
+        }
+    }
+
+    // Unlock the photo
+    function unlockPhoto() {
+        const keyInput = document.getElementById('key-input').value.trim();
+        const correctKey = "lar19";
+
+        if (keyInput === correctKey) {
+            document.getElementById('key-container').classList.add('hidden');
+            // Show the photo container and download button immediately
+            photoContainer.classList.remove('hidden'); // Show the photo container
+            downloadBtn.classList.remove('hidden'); // Show the download button
+            photoContainer.style.visibility = 'visible'; // Ensure visibility
+            photoContainer.style.opacity = '1'; // Fade in effect
+            photoContainer.classList.add('show'); // Add class to trigger CSS transition
+        } else {
+            alert('Incorrect key! Try again.');
+        }
+    }
+</script>
+
 </body>
 </html>
